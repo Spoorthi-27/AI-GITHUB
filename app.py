@@ -1,5 +1,7 @@
 import warnings
 warnings.filterwarnings("ignore")
+import os
+os.environ["ANONYMIZED_TELEMETRY"] = "False"
 import uuid
 import streamlit as st
 from src.clone_repo import clone_repo, cleanup_repo
@@ -83,7 +85,7 @@ footer { display: none; }
     font-size: 11px;
     font-weight: 600;
     letter-spacing: 0.3em;
-    color: #00ff88;
+    color: #3ecf8e;
     text-transform: uppercase;
     margin-bottom: 32px;
     opacity: 0.9;
@@ -101,7 +103,10 @@ footer { display: none; }
 }
 
 .gm-title span {
-    color: #00ff88;
+    background: linear-gradient(135deg, #3ecf8e, #5eead4);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
     position: relative;
 }
 
@@ -137,7 +142,7 @@ footer { display: none; }
 }
 
 .stTextInput > div > div:focus-within {
-    border-color: #00ff88 !important;
+    border-color: #3ecf8e !important;
     background: rgba(0,255,136,0.03) !important;
     box-shadow: 0 0 0 1px rgba(0,255,136,0.2) !important;
 }
@@ -153,7 +158,7 @@ footer { display: none; }
 
 /* ── Buttons ── */
 .stButton > button {
-    background: #00ff88 !important;
+    background: #3ecf8e !important;
     color: #080b0f !important;
     border: none !important;
     border-radius: 4px !important;
@@ -169,12 +174,20 @@ footer { display: none; }
 }
 
 .stButton > button:hover {
-    background: #00e87a !important;
+    background: #34b87c !important;
     transform: translateY(-1px) !important;
     box-shadow: 0 8px 24px rgba(0,255,136,0.25) !important;
 }
 
 .stButton > button:active { transform: translateY(0) !important; }
+
+.stButton > button,
+.stButton > button * ,
+.stButton > button p,
+.stButton > button span,
+.stButton > button div {
+    color: #080b0f !important;
+}
 
 /* ── Feature pills ── */
 .gm-pills {
@@ -225,7 +238,7 @@ footer { display: none; }
     letter-spacing: -0.02em;
 }
 
-.gm-topbar-logo span { color: #00ff88; }
+.gm-topbar-logo span { color: #3ecf8e; }
 
 .gm-topbar-repo {
     font-family: 'JetBrains Mono', monospace;
@@ -247,13 +260,13 @@ footer { display: none; }
     gap: 8px;
     font-family: 'JetBrains Mono', monospace;
     font-size: 11px;
-    color: #00ff88;
+    color: #3ecf8e;
 }
 
 .gm-status-dot {
     width: 6px;
     height: 6px;
-    background: #00ff88;
+    background: #3ecf8e;
     border-radius: 50%;
     animation: pulse 2s infinite;
 }
@@ -286,7 +299,7 @@ footer { display: none; }
     margin-bottom: 6px;
 }
 
-.gm-stat-num.green { color: #00ff88; }
+.gm-stat-num.green { color: #3ecf8e; }
 
 .gm-stat-label {
     font-family: 'JetBrains Mono', monospace;
@@ -318,7 +331,7 @@ footer { display: none; }
 .gm-tech-badge {
     font-family: 'JetBrains Mono', monospace;
     font-size: 11px;
-    color: #00ff88;
+    color: #3ecf8e;
     background: rgba(0,255,136,0.08);
     border: 1px solid rgba(0,255,136,0.2);
     border-radius: 2px;
@@ -348,8 +361,8 @@ footer { display: none; }
 }
 
 .gm-tab.active {
-    color: #00ff88;
-    border-bottom-color: #00ff88;
+    color: #3ecf8e;
+    border-bottom-color: #3ecf8e;
 }
 
 /* ── Content area ── */
@@ -383,7 +396,7 @@ footer { display: none; }
 .gm-answer {
     background: rgba(255,255,255,0.02);
     border: 1px solid rgba(255,255,255,0.07);
-    border-left: 3px solid #00ff88;
+    border-left: 3px solid #3ecf8e;
     border-radius: 4px;
     padding: 28px 32px;
     font-family: 'JetBrains Mono', monospace;
@@ -453,20 +466,20 @@ footer { display: none; }
 }
 
 .stProgress > div > div > div {
-    background: linear-gradient(90deg, #00ff88, #00e0ff) !important;
+    background: linear-gradient(90deg, #3ecf8e, #00e0ff) !important;
     border-radius: 2px !important;
 }
 
 /* ── Spinner ── */
 .stSpinner > div {
-    border-top-color: #00ff88 !important;
+    border-top-color: #3ecf8e !important;
 }
 
 /* ── Alerts ── */
 .stSuccess {
     background: rgba(0,255,136,0.08) !important;
     border: 1px solid rgba(0,255,136,0.2) !important;
-    color: #00ff88 !important;
+    color: #3ecf8e !important;
     border-radius: 4px !important;
     font-family: 'JetBrains Mono', monospace !important;
     font-size: 13px !important;
@@ -499,7 +512,7 @@ footer { display: none; }
 
 [data-testid="stMarkdownContainer"] code {
     background: rgba(0,255,136,0.08) !important;
-    color: #00ff88 !important;
+    color: #3ecf8e !important;
     border-radius: 2px !important;
     padding: 2px 6px !important;
     font-family: 'JetBrains Mono', monospace !important;
@@ -526,7 +539,7 @@ footer { display: none; }
 /* ── Download button ── */
 .stDownloadButton > button {
     background: transparent !important;
-    color: #00ff88 !important;
+    color: #3ecf8e !important;
     border: 1px solid rgba(0,255,136,0.3) !important;
     border-radius: 4px !important;
     font-family: 'Syne', sans-serif !important;
@@ -540,7 +553,7 @@ footer { display: none; }
 
 .stDownloadButton > button:hover {
     background: rgba(0,255,136,0.08) !important;
-    border-color: #00ff88 !important;
+    border-color: #3ecf8e !important;
 }
 
 /* ── Diagram box ── */
@@ -866,13 +879,13 @@ else:
                     themeVariables: {{
                         primaryColor: '#1a1f2e',
                         primaryTextColor: '#e8e6e0',
-                        primaryBorderColor: '#00ff88',
-                        lineColor: '#00ff88',
+                        primaryBorderColor: '#3ecf8e',
+                        lineColor: '#3ecf8e',
                         secondaryColor: '#0d1117',
                         tertiaryColor: '#161b22',
                         background: 'transparent',
                         mainBkg: '#0d1117',
-                        nodeBorder: '#00ff88',
+                        nodeBorder: '#3ecf8e',
                         clusterBkg: '#161b22',
                         titleColor: '#e8e6e0',
                         edgeLabelBackground: '#0d1117',

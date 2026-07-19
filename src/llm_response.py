@@ -27,7 +27,19 @@ def get_llm() -> ChatGroq:
         groq_api_key=api_key,
         model_name="openai/gpt-oss-20b",
         temperature=0.2,
+        reasoning_effort="low",
+        max_tokens=3000,
     )
+
+
+def _safe_content(response, context_label: str) -> str:
+    if not response.content or not response.content.strip():
+        raise ValueError(
+            f"{context_label} returned empty content — the model may have "
+            "used its full token budget on reasoning. Try increasing max_tokens "
+            "further or reducing the amount of context sent."
+        )
+    return response.content
 
 
 def generate_response(query: str, docs: list) -> str:
@@ -52,7 +64,7 @@ Answer based only on the repository content above.""")
     ]
 
     response = llm.invoke(messages)
-    return response.content
+    return _safe_content(response, "Chat response")
 
 
 def generate_summary(docs: list) -> str:
@@ -85,4 +97,4 @@ Be specific and technical. Reference actual file names.""")
     ]
 
     response = llm.invoke(messages)
-    return response.content
+    return _safe_content(response, "Summary")
