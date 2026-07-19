@@ -28,9 +28,6 @@ Understanding an unfamiliar codebase usually means hours of manually reading thr
 
 ## Project Structure
 
-
-## Project Structure
-
 .
 |-- app.py                     Streamlit UI, page routing, and orchestration
 |-- requirements.txt
@@ -46,6 +43,7 @@ Understanding an unfamiliar codebase usually means hours of manually reading thr
     |-- diagram_generator.py   Mermaid diagram generation with syntax sanitization
     |-- readme_generator.py    README generation for the analyzed repo
     `-- tech_detector.py       Detects languages/frameworks from repo contents
+
 ## Prerequisites
 
 - Python 3.11+
@@ -54,14 +52,10 @@ Understanding an unfamiliar codebase usually means hours of manually reading thr
 
 ## Installation
 
-
 git clone https://github.com/Spoorthi-27/AI-GITHUB.git
 cd AI-GITHUB
 python -m venv venv
-venv\Scripts\activate          # Windows
-source venv/bin/activate       # macOS/Linux
-pip install -r requirements.txt
-
+venv\Scripts\activate
 
 ## Configuration
 
