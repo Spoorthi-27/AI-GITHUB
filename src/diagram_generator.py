@@ -9,7 +9,7 @@ load_dotenv()
 def generate_mermaid_diagram(docs: list) -> str:
     llm = ChatGroq(
         groq_api_key=os.getenv("GROQ_API_KEY"),
-        model_name="llama3-8b-8192",
+        model_name="openai/gpt-oss-20b",
         temperature=0.1,
     )
 

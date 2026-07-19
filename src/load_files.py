@@ -14,7 +14,12 @@ SKIP_DIRS = {
     ".git", "node_modules", "__pycache__", ".venv",
     "venv", "env", "dist", "build", ".next",
     ".nuxt", "coverage", ".pytest_cache", ".mypy_cache",
+    "vendor", "target", ".idea", ".vscode", "bin", "obj",
+    ".tox", "site-packages", "egg-info",
 }
+
+MAX_FILE_SIZE_BYTES = 300_000       # skip individual files over ~300 KB (usually generated/data files, not source)
+MAX_TOTAL_FILES = 400               # hard cap so a huge repo (e.g. langchain) doesn't stall the whole pipeline
 
 
 def load_files(repo_path: str) -> list:
@@ -24,12 +29,18 @@ def load_files(repo_path: str) -> list:
         dirs[:] = [d for d in dirs if d not in SKIP_DIRS]
 
         for file in files:
+            if len(documents) >= MAX_TOTAL_FILES:
+                return documents
+
             file_path = os.path.join(root, file)
 
             if not _is_supported(file):
                 continue
 
             try:
+                if os.path.getsize(file_path) > MAX_FILE_SIZE_BYTES:
+                    continue
+
                 with open(file_path, "r", encoding="utf-8", errors="ignore") as f:
                     content = f.read().strip()
 

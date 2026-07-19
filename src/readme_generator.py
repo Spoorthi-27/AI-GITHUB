@@ -9,8 +9,10 @@ load_dotenv()
 def generate_readme(docs: list, tech_stack: list, repo_url: str) -> str:
     llm = ChatGroq(
         groq_api_key=os.getenv("GROQ_API_KEY"),
-        model_name="llama3-8b-8192",
+        model_name="openai/gpt-oss-20b",
         temperature=0.3,
+        reasoning_effort="low",
+        max_tokens=4000,
     )
 
     sample = docs[:25]
@@ -51,4 +53,12 @@ Include these sections:
     ]
 
     response = llm.invoke(messages)
+
+    if not response.content or not response.content.strip():
+        raise ValueError(
+            "README generation returned empty content — the model may have "
+            "used its full token budget on reasoning. Try increasing max_tokens "
+            "further or reducing the number of sample files."
+        )
+
     return response.content

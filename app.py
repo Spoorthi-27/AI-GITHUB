@@ -1,12 +1,12 @@
 import warnings
 warnings.filterwarnings("ignore")
-
+import uuid
 import streamlit as st
-from src.clone_repo import clone_repo
+from src.clone_repo import clone_repo, cleanup_repo
 from src.load_files import load_files
 from src.chunking import chunk_documents
 from src.embeddings import get_embeddings
-from src.vector_store import create_vector_store
+from src.vector_store import create_vector_store, cleanup_vector_store
 from src.retriever import retrieve_docs
 from src.llm_response import generate_response, generate_summary
 from src.tech_detector import detect_tech_stack
@@ -571,10 +571,11 @@ footer { display: none; }
 
 # ── Session state ─────────────────────────────────────────────────────────────
 for key in ["db", "docs", "tech_stack", "repo_url", "processed",
-            "file_count", "chunk_count", "active_tab"]:
+            "file_count", "chunk_count", "active_tab", "repo_path"]:
     if key not in st.session_state:
         st.session_state[key] = None
-
+if "session_id" not in st.session_state:
+    st.session_state.session_id = str(uuid.uuid4())[:8]
 if not st.session_state.processed:
     st.session_state.processed = False
 if not st.session_state.active_tab:
@@ -627,14 +628,14 @@ if not st.session_state.processed:
             progress = st.progress(0, text="")
             try:
                 progress.progress(10, text="↓  cloning repository...")
-                clone_repo(repo_url)
+                repo_path = clone_repo(repo_url, session_id=st.session_state.session_id)
 
                 progress.progress(28, text="⬡  detecting tech stack...")
-                tech_stack = detect_tech_stack("cloned_repo")
+                tech_stack = detect_tech_stack(repo_path)
                 st.session_state.tech_stack = tech_stack
 
                 progress.progress(45, text="◈  loading files...")
-                docs = load_files("cloned_repo")
+                docs = load_files(repo_path)
                 if not docs:
                     st.error("No readable files found.")
                     st.stop()
@@ -647,10 +648,11 @@ if not st.session_state.processed:
                 embeddings = get_embeddings()
 
                 progress.progress(90, text="▣  building vector store...")
-                db = create_vector_store(chunks, embeddings)
+                db = create_vector_store(chunks, embeddings, session_id=st.session_state.session_id)
 
                 st.session_state.db = db
                 st.session_state.repo_url = repo_url
+                st.session_state.repo_path = repo_path
                 st.session_state.file_count = len(docs)
                 st.session_state.chunk_count = len(chunks)
                 st.session_state.processed = True
@@ -736,8 +738,10 @@ else:
         )
     with col_new:
         if st.button("← New repo", use_container_width=True):
+            cleanup_repo(st.session_state.get("repo_path"))
+            cleanup_vector_store(st.session_state.session_id)
             for key in ["db", "docs", "tech_stack", "repo_url", "processed",
-                        "file_count", "chunk_count", "active_tab"]:
+                        "file_count", "chunk_count", "active_tab", "repo_path"]:
                 st.session_state[key] = None
             st.session_state.processed = False
             st.rerun()
