@@ -29,23 +29,23 @@ Understanding an unfamiliar codebase usually means hours of manually reading thr
 ## Project Structure
 
 
+## Project Structure
+
 .
-├── app.py                     # Streamlit UI, page routing, and orchestration
-├── src/
-│   ├── clone_repo.py          # Session-isolated repo cloning (temp dirs, no collisions)
-│   ├── load_files.py          # Reads repo files, filters noise, caps size/count for speed
-│   ├── chunking.py            # Splits documents into embeddable chunks
-│   ├── embeddings.py          # Loads and caches the MiniLM embedding model
-│   ├── vector_store.py        # Session-isolated ChromaDB vector store
-│   ├── retriever.py           # Similarity search over the vector store
-│   ├── llm_response.py        # Chat + summary generation via Groq
-│   ├── diagram_generator.py   # Mermaid diagram generation with syntax sanitization
-│   ├── readme_generator.py    # README generation for the analyzed repo
-│   └── tech_detector.py       # Detects languages/frameworks from repo contents
-├── requirements.txt
-└── .env                       # GROQ_API_KEY (not committed)
-
-
+|-- app.py                     Streamlit UI, page routing, and orchestration
+|-- requirements.txt
+|-- .env                       GROQ_API_KEY (not committed)
+`-- src/
+    |-- clone_repo.py          Session-isolated repo cloning (temp dirs, no collisions)
+    |-- load_files.py          Reads repo files, filters noise, caps size/count for speed
+    |-- chunking.py            Splits documents into embeddable chunks
+    |-- embeddings.py          Loads and caches the MiniLM embedding model
+    |-- vector_store.py        Session-isolated ChromaDB vector store
+    |-- retriever.py           Similarity search over the vector store
+    |-- llm_response.py        Chat + summary generation via Groq
+    |-- diagram_generator.py   Mermaid diagram generation with syntax sanitization
+    |-- readme_generator.py    README generation for the analyzed repo
+    `-- tech_detector.py       Detects languages/frameworks from repo contents
 ## Prerequisites
 
 - Python 3.11+
